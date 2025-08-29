@@ -41,14 +41,14 @@ pipeline {
             }
         }
         
-        // stage("Quality Gate") {
-        //     steps {
-        //         echo "Step: Checking SonarQube Quality Gate"
-        //         timeout(time: 2, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
+        stage("Quality Gate") {
+            steps {
+                echo "Step: Checking SonarQube Quality Gate"
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         
         stage("OWASP dependency check") {
             steps{

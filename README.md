@@ -1,4 +1,4 @@
-# Jenkins CI/CD Pipeline with SonarQube, OWASP Dependency Check, and AWS ECR
+# Jenkins CI/CD Pipeline with SonarQube, OWASP Dependency Check, AWS ECR, and AWS Secrets Manager
 
 ## 📌 Project Overview
 This project demonstrates a **Jenkins CI/CD pipeline** that automates the process of building, analyzing, securing, and deploying a Dockerized application to **Amazon Elastic Container Registry (ECR)**.  
@@ -9,11 +9,14 @@ The pipeline includes:
 - **Dependency Scanning with OWASP Dependency-Check** – Identifies vulnerable dependencies.  
 - **Docker Image Build** – Builds a container image from the application code.  
 - **Image Push to AWS ECR** – Securely pushes the built image to AWS ECR.  
+- **Secrets Management with AWS Secrets Manager** – Stores sensitive information such as AWS credentials, repository URIs, and other Jenkins secrets securely.  
 - **Post-Build Cleanup** – Removes unused images from Jenkins agent to save space.  
 
 ---
 
 ## ⚙️ Pipeline Workflow
+![Pipeline Flow](assets/CICD workflow.png)  
+
 1. **Checkout Code**  
    - Clones the source code from GitHub (`main` branch).
 
@@ -23,7 +26,8 @@ The pipeline includes:
 
 3. **Dependency Security Check (OWASP)**  
    - Scans dependencies for known vulnerabilities.  
-   - Generates security reports.  
+   - Generates security reports.
+   - Enable SonarQube **Quality Gate** stage (currently commented in pipeline).  
 
 4. **Docker Image Build**  
    - Builds the Docker image using the provided `Dockerfile`.  
@@ -34,8 +38,6 @@ The pipeline includes:
 
 6. **Cleanup**  
    - Removes local Docker images and prunes unused layers.  
-
----
 
 
 ---
@@ -62,8 +64,13 @@ To run this pipeline successfully, ensure the following are available:
 
 4. **AWS Setup**
    - AWS CLI installed and configured on Jenkins agents.  
-   - AWS credentials configured for Jenkins with ECR access.  
-   - ECR repository created in AWS account.  
+   - AWS ECR repository created in AWS account.  
+   - **AWS Secrets Manager used to securely store Jenkins credentials** such as:
+     - Repository URI  
+     - Image repo name  
+     - Region  
+     - Account ID  
+     - AWS authentication keys  
 
 ---
 
@@ -78,10 +85,10 @@ To run this pipeline successfully, ensure the following are available:
 | Variable        | Description |
 |-----------------|-------------|
 | `IMAGE_TAG`     | Docker image tag (taken from `DEPLOY_VERSION`). |
-| `REPOSITORY_URI`| AWS ECR repository URI (stored in Jenkins credentials). |
-| `IMAGE_REPO_NAME`| Name of the Docker image repository. |
-| `REGION`        | AWS region where ECR is created. |
-| `ACCOUNT_ID`    | AWS Account ID. |
+| `REPOSITORY_URI`| AWS ECR repository URI (retrieved from AWS Secrets Manager). |
+| `IMAGE_REPO_NAME`| Name of the Docker image repository (retrieved from AWS Secrets Manager). |
+| `REGION`        | AWS region where ECR is created (retrieved from AWS Secrets Manager). |
+| `ACCOUNT_ID`    | AWS Account ID (retrieved from AWS Secrets Manager). |
 | `SONAR_HOME`    | Path to the SonarQube scanner tool. |
 
 ---
@@ -89,12 +96,7 @@ To run this pipeline successfully, ensure the following are available:
 ## 🚀 Running the Pipeline
 1. Commit and push your changes to the GitHub repository.  
 2. In Jenkins, create a new pipeline project and point it to this repository.  
-3. Add required credentials in Jenkins:
-   - AWS ECR credentials  
-   - Repository URI  
-   - Image repo name  
-   - Region  
-   - Account ID  
+3. Add required secrets in **AWS Secrets Manager**, and configure Jenkins to fetch them dynamically.  
 4. Run the pipeline and provide `DEPLOY_VERSION` when prompted.  
 5. Verify the Docker image is available in your AWS ECR repository.  
 
@@ -103,6 +105,7 @@ To run this pipeline successfully, ensure the following are available:
 ## 📊 Security & Quality Tools
 - **SonarQube**: Helps maintain clean, safe, and reliable code.  
 - **OWASP Dependency-Check**: Detects security vulnerabilities in project dependencies.  
+- **AWS Secrets Manager**: Protects sensitive data by avoiding plain text credentials in Jenkins.  
 
 ---
 
@@ -115,7 +118,6 @@ After every build, the pipeline automatically:
 
 ## 📌 Future Enhancements
 - Add automated deployment to AWS ECS or Kubernetes (EKS).  
-- Enable SonarQube **Quality Gate** stage (currently commented in pipeline).  
 - Add email or Slack notifications for build results.  
 
 ---
