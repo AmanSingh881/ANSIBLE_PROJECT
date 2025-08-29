@@ -15,7 +15,7 @@ The pipeline includes:
 ---
 
 ## ⚙️ Pipeline Workflow
-![Pipeline Flow](assets/CICD workflow.png)  
+![Pipeline Flow](assets/CICDworkflow.png)  
 
 1. **Checkout Code**  
    - Clones the source code from GitHub (`main` branch).
