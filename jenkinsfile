@@ -85,5 +85,17 @@ pipeline {
           }
         }
     }
+
+    post {
+        always {
+            echo "Cleaning up local Docker images..."
+            sh """
+                docker rmi ${IMAGE_REPO_NAME}:${IMAGE_TAG} || true
+                docker rmi ${REPOSITORY_URI}:${IMAGE_TAG} || true
+                docker image prune -f || true
+            """
+        }
+    }
+
 }
 
