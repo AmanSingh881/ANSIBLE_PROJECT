@@ -22,7 +22,7 @@ pipeline {
             steps {
                 // Get some code from a GitHub repository
                 git(
-                    url: "https://github.com/AmanSingh881/web-project2.git",
+                    url: "https://github.com/AmanSingh881/DevSecOps-Pipeline-Project.git",
                     branch: "main"
                 )
 
