@@ -91,6 +91,9 @@ To run this pipeline successfully, ensure the following are available:
 | `ACCOUNT_ID`    | AWS Account ID (retrieved from AWS Secrets Manager). |
 | `SONAR_HOME`    | Path to the SonarQube scanner tool. |
 
+
+## ⚙️ Secrets in Secret Manager AWS
+![Pipeline Flow](assets/Secrets.png) 
 ---
 
 ## 🚀 Running the Pipeline

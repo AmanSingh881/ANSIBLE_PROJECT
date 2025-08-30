@@ -7,12 +7,13 @@ pipeline {
       }
     // Environment variables used across the pipeline
     environment {
+            // Secrets stored in AWS Secret Manager
             IMAGE_TAG="${params.DEPLOY_VERSION}"
             REPOSITORY_URI=credentials("REPOSITORY_URI")
             IMAGE_REPO_NAME=credentials("IMAGE_REPO_NAME")
             REGION=credentials("REGION")
             ACCOUNT_ID=credentials('ACCOUNT_ID')
-
+            
             SONAR_HOME = tool "Sonar"
     }
 
